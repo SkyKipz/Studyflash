@@ -3,7 +3,7 @@
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
 /// Example:
@@ -49,9 +49,9 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyD1qCU3MYRjHCY3j7AIogl3XyvBdAWy-sE',
-    appId: '1:687331236813:web:24d15734ca18d54fd1c284',
+  static FirebaseOptions web = FirebaseOptions(
+    apiKey: dotenv.env['FIREBASE_API_KEY_WEB'] ?? (throw Exception('FIREBASE_API_KEY_WEB not found')),
+    appId: '1:687331236813:web:d4866b352734b685d1c284',
     messagingSenderId: '687331236813',
     projectId: 'studyflash-pj',
     authDomain: 'studyflash-pj.firebaseapp.com',
@@ -59,13 +59,12 @@ class DefaultFirebaseOptions {
     storageBucket: 'studyflash-pj.firebasestorage.app',
   );
 
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDY0S2-iqQN_yhSJ59IUF4QtnhHuQVUtRQ',
-    appId: '1:687331236813:android:be1cd54a01517014d1c284',
+  static FirebaseOptions android = FirebaseOptions(
+    apiKey: dotenv.env['FIREBASE_API_KEY_ANDROID'] ?? (throw Exception('FIREBASE_API_KEY_ANDROID not found')),
+    appId: '1:687331236813:android:d00d0df0f006f24cd1c284',
     messagingSenderId: '687331236813',
     projectId: 'studyflash-pj',
     databaseURL: 'https://studyflash-pj-default-rtdb.firebaseio.com',
     storageBucket: 'studyflash-pj.firebasestorage.app',
   );
-
 }
