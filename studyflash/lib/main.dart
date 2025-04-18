@@ -1,17 +1,25 @@
 import 'package:flutter/material.dart';
-import 'home.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:studyflash/firebase_options.dart';
+import 'presentation/screens/home_screen.dart';
 
-void main() => runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(const StudyFlash());
+}
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class StudyFlash extends StatelessWidget {
+  const StudyFlash({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'StudyFlash',
-      debugShowCheckedModeBanner: false,
-      home: const Home(),
+      theme: ThemeData(useMaterial3: true, colorSchemeSeed: Colors.blue),
+      home: const HomeScreen(),
     );
   }
 }

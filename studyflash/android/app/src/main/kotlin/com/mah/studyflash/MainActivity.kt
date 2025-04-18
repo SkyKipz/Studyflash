@@ -1,4 +1,4 @@
-package com.example.studyflash
+package com.mah.studyflash
 
 import io.flutter.embedding.android.FlutterActivity
 

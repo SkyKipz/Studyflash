@@ -1,0 +1,2 @@
+C:/devAppsMob/Studyflash/studyflash/android/app/.cxx/Debug/6p3h146z/x86/CMakeFiles/edit_cache.dir
+C:/devAppsMob/Studyflash/studyflash/android/app/.cxx/Debug/6p3h146z/x86/CMakeFiles/rebuild_cache.dir
