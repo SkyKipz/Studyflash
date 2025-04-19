@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (question.isEmpty || answer.isEmpty) return;
 
     final card = Flashcard(
-      id: DateTime.now().toString(),
+      id: DateTime.now().toIso8601String().replaceAll(RegExp(r'[.#$[\]]'), '-'),
       question: question,
       answer: answer,
     );
