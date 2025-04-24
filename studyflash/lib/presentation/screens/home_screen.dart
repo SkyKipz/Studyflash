@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'home_screen2.dart';
+import 'confi.dart';
 
 class NewHomeScreen extends StatelessWidget {
   const NewHomeScreen({super.key});
@@ -28,7 +29,12 @@ class NewHomeScreen extends StatelessWidget {
                         SizedBox(height: 8),
                         CircleAvatar(
                           radius: 30,  // Tamaño de la imagen
-                          backgroundImage: AssetImage('assets/default_profile.png'),  // Imagen predeterminada
+                           backgroundColor: Colors.grey[800],
+                          child: Icon(
+                            Icons.person,
+                            color: Colors.white,
+                            size: 30, // Tamaño del ícono dentro del círculo
+                          ),
                         ),
                         SizedBox(height: 5),  // Espacio entre la imagen y el texto
                         Text(
@@ -52,7 +58,10 @@ class NewHomeScreen extends StatelessWidget {
                     leading: Icon(Icons.settings),
                     title: Text('Configuración'),
                     onTap: () {
-                      // Funcionalidad futura para Configuración
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const ConfiScreen()),
+                      );
                     },
                   ),
                   ListTile(
