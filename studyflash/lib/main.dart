@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:studyflash/firebase_options.dart';
 import 'presentation/screens/home_screen.dart';
+//import 'presentation/screens/home_screen2.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,8 +22,9 @@ class StudyFlash extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'StudyFlash',
-      theme: ThemeData(useMaterial3: true, colorSchemeSeed: Colors.blue),
-      home: const HomeScreen(),
+      //theme: ThemeData(useMaterial3: true, colorSchemeSeed: Colors.blue),
+      theme: ThemeData.dark(),
+      home: NewHomeScreen(),
     );
   }
 }
