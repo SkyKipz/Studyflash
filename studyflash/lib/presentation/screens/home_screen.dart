@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'home_screen2.dart';
+import 'editartarjetas.dart';
 import 'confi.dart';
 
 class NewHomeScreen extends StatelessWidget {
@@ -7,101 +7,82 @@ class NewHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    //cambiarlo despues por la bd
+    final List<Map<String, String>> conjuntos = [
+      {'titulo': 'Biología Básica', 'subtitulo': 'Células, ADN y más'},
+      {'titulo': 'Historia Mundial', 'subtitulo': 'Primera y Segunda Guerra'},
+      {'titulo': 'Inglés Intermedio', 'subtitulo': 'Vocabulario y gramática'},
+    ];
+
     return Scaffold(
       backgroundColor: Colors.black,
       drawer: Drawer(
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: <Widget>[
-                  DrawerHeader(
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 85, 84, 84),
-                    ),
-                    child: Column(
-                      children: [
-                        Text(
-                          'Menú',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                          ),
-                        ),
-                        SizedBox(height: 8),
-                        CircleAvatar(
-                          radius: 30,  // Tamaño de la imagen
-                           backgroundColor: Colors.grey[800],
-                          child: Icon(
-                            Icons.person,
-                            color: Colors.white,
-                            size: 30, // Tamaño del ícono dentro del círculo
-                          ),
-                        ),
-                        SizedBox(height: 5),  // Espacio entre la imagen y el texto
-                        Text(
-                          'Invitado',  // Nombre predeterminado
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ],
-                    ),
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 85, 84, 84),
+              ),
+              child: Column(
+                children: [
+                  const Text(
+                    'Menú',
+                    style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
-                  ListTile(
-                    leading: Icon(Icons.bookmark),
-                    title: Text('Marcadores'),
-                    onTap: () {
-                      // Funcionalidad futura para Marcadores
-                    },
+                  const SizedBox(height: 8),
+                  CircleAvatar(
+                    radius: 30,
+                    backgroundColor: Colors.grey[800],
+                    child: const Icon(Icons.person, color: Colors.white, size: 30),
                   ),
-                  ListTile(
-                    leading: Icon(Icons.settings),
-                    title: Text('Configuración'),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const ConfiScreen()),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.help),
-                    title: Text('Ayuda'),
-                    onTap: () {
-                      // Funcionalidad futura para Ayuda
-                    },
+                  const SizedBox(height: 5),
+                  const Text(
+                    'Invitado',
+                    style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ],
               ),
             ),
+            ListTile(
+              leading: const Icon(Icons.bookmark),
+              title: const Text('Marcadores'),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text('Configuración'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ConfiScreen()),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.help),
+              title: const Text('Ayuda'),
+              onTap: () {},
+            ),
+          ],
+        ),
+      ),
       appBar: AppBar(
         backgroundColor: Colors.black,
         elevation: 0,
-        //boton "menu"
         leading: Builder(
           builder: (context) => IconButton(
-            icon: const Icon(
-              Icons.menu,
-              color: Colors.white,  // Establece el color del ícono como blanco
-            ),
+            icon: const Icon(Icons.menu, color: Colors.white),
             onPressed: () => Scaffold.of(context).openDrawer(),
           ),
         ),
-        title: const Text(
-          'StudyFlash',
-          style: TextStyle(
-            fontSize: 24,
-            color: Colors.white,  // Establece el color del texto como blanco
-          ),
-        ),
+        title: const Text('StudyFlash', style: TextStyle(color: Colors.white)),
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            //boton "Busqueda"
             child: InkWell(
-              onTap: () {
-                debugPrint("Barra de búsqueda presionada");
-              },
+              onTap: () => debugPrint("Barra de búsqueda presionada"),
               borderRadius: BorderRadius.circular(8),
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -115,16 +96,12 @@ class NewHomeScreen extends StatelessWidget {
                   children: const [
                     Icon(Icons.search, color: Colors.white70),
                     SizedBox(width: 8),
-                    Text(
-                      'Buscar...',
-                      style: TextStyle(color: Colors.white54, fontSize: 16),
-                    ),
+                    Text('Buscar...', style: TextStyle(color: Colors.white54)),
                   ],
                 ),
               ),
             ),
           ),
-          //boton "tres puntos"
           IconButton(
             icon: const Icon(Icons.more_vert),
             onPressed: () {},
@@ -135,20 +112,82 @@ class NewHomeScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Text(
+          children: [
+            const Text(
               'Conjuntos de flashcards',
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 32),
-            // contenido futuro aquí
+            const SizedBox(height: 16),
+            // Usamos Expanded para que ListView.builder no genere error
+            Expanded(
+              child: ListView.builder(
+                itemCount: conjuntos.length,
+                itemBuilder: (context, index) {
+                  final conjunto = conjuntos[index];
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 16),
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[900],
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(color: Colors.black54, blurRadius: 4, offset: Offset(0, 2)),
+                      ],
+                    ),
+                    child: Stack(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              conjunto['titulo']!,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              conjunto['subtitulo']!,
+                              style: const TextStyle(color: Colors.white70),
+                            ),
+                            const SizedBox(height: 40),
+                          ],
+                        ),
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: IconButton(
+                            icon: const Icon(Icons.more_vert, color: Colors.white),
+                            onPressed: () {},
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.deepPurple,
+                            ),
+                            onPressed: () {
+                              // Acción de repasar
+                            },
+                            child: const Text('Repasar'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),
-      //boton "+"
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-           Navigator.push(
+          Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const HomeScreen()),
           );
@@ -159,3 +198,4 @@ class NewHomeScreen extends StatelessWidget {
     );
   }
 }
+
