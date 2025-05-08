@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:studyflash/domain/use_cases/editartarjetas.dart';
 import 'confi.dart';
+import 'opciones.dart'; 
 
 class NewHomeScreen extends StatelessWidget {
   const NewHomeScreen({super.key});
@@ -160,7 +161,9 @@ class NewHomeScreen extends StatelessWidget {
                           right: 0,
                           child: IconButton(
                             icon: const Icon(Icons.more_vert, color: Colors.white),
-                            onPressed: () {},
+                            onPressed: () {
+                              showOpcionesDialog(context);
+                            },
                           ),
                         ),
                         Positioned(
