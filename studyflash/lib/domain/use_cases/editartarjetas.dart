@@ -4,14 +4,14 @@ import 'package:studyflash/data/repositories/flashcard_repository_impl.dart';
 import 'package:studyflash/domain/models/flashcard.dart';
 import 'package:studyflash/domain/use_cases/create_flashcard.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class EditScreen extends StatefulWidget {
+  const EditScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<EditScreen> createState() => _EditScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _EditScreenState extends State<EditScreen> {
   final _repo = FlashcardRepositoryImpl(FirebaseDatabaseService());
   final _questionController = TextEditingController();
   final _answerController = TextEditingController();

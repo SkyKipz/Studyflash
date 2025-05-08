@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'editartarjetas.dart';
+import 'package:studyflash/domain/use_cases/editartarjetas.dart';
 import 'confi.dart';
 
 class NewHomeScreen extends StatelessWidget {
@@ -189,7 +189,7 @@ class NewHomeScreen extends StatelessWidget {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
+            MaterialPageRoute(builder: (context) => EditScreen()),
           );
         },
         backgroundColor: Colors.deepPurple,
