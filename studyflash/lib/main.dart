@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:studyflash/firebase_options.dart';
 import 'presentation/screens/home_screen.dart';
-//import 'presentation/screens/home_screen2.dart';
+import 'package:studyflash/presentation/screens/intro_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,19 +12,24 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const StudyFlash());
+  
+  final prefs = await SharedPreferences.getInstance();
+  final bool introShown = prefs.getBool('introShown') ?? false;
+
+  runApp(StudyFlash(showIntro: !introShown));
 }
 
 class StudyFlash extends StatelessWidget {
-  const StudyFlash({super.key});
+  final bool showIntro;
+
+  const StudyFlash({super.key, required this.showIntro});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'StudyFlash',
-      //theme: ThemeData(useMaterial3: true, colorSchemeSeed: Colors.blue),
       theme: ThemeData.dark(),
-      home: NewHomeScreen(),
+      home: showIntro ? const IntroScreen() : const NewHomeScreen(),
     );
   }
 }
