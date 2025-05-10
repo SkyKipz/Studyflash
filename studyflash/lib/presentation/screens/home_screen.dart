@@ -3,19 +3,77 @@ import 'package:studyflash/domain/use_cases/editartarjetas.dart';
 import 'confi.dart';
 import 'opciones.dart'; 
 
-class NewHomeScreen extends StatelessWidget {
+class NewHomeScreen extends StatefulWidget {
   const NewHomeScreen({super.key});
 
   @override
+  _NewHomeScreenState createState() => _NewHomeScreenState();
+}
+
+class _NewHomeScreenState extends State<NewHomeScreen> {
+  final TextEditingController _busquedaController = TextEditingController();
+
+  final List<Map<String, String>> conjuntos = [
+    {'titulo': 'Biología Básica', 'subtitulo': 'Células, ADN y más'},
+    {'titulo': 'Historia Mundial', 'subtitulo': 'Primera y Segunda Guerra'},
+    {'titulo': 'Inglés Intermedio', 'subtitulo': 'Vocabulario y gramática'},
+  ];
+
+  List<Map<String, String>> _conjuntosFiltrados = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _conjuntosFiltrados = List.from(conjuntos);
+  }
+
+  void _filtrarConjuntos(String query) {
+    setState(() {
+      _conjuntosFiltrados = conjuntos
+          .where((conjunto) =>
+              conjunto['titulo']!.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    });
+  }
+
+  void _mostrarCampoBusqueda() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.black87,
+          title: const Text('Buscar', style: TextStyle(color: Colors.white)),
+          content: TextField(
+            controller: _busquedaController,
+            autofocus: true,
+            style: const TextStyle(color: Colors.white),
+            decoration: const InputDecoration(
+              hintText: 'Buscar título...',
+              hintStyle: TextStyle(color: Colors.white54),
+              enabledBorder:
+                  UnderlineInputBorder(borderSide: BorderSide(color: Colors.white54)),
+              focusedBorder:
+                  UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+            ),
+            onChanged: _filtrarConjuntos,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                _busquedaController.clear();
+                _filtrarConjuntos('');
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cerrar', style: TextStyle(color: Colors.deepPurple)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
-
-    //cambiarlo despues por la bd
-    final List<Map<String, String>> conjuntos = [
-      {'titulo': 'Biología Básica', 'subtitulo': 'Células, ADN y más'},
-      {'titulo': 'Historia Mundial', 'subtitulo': 'Primera y Segunda Guerra'},
-      {'titulo': 'Inglés Intermedio', 'subtitulo': 'Vocabulario y gramática'},
-    ];
-
     return Scaffold(
       backgroundColor: Colors.black,
       drawer: Drawer(
@@ -23,15 +81,12 @@ class NewHomeScreen extends StatelessWidget {
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 85, 84, 84),
+              decoration: const BoxDecoration(
+                color: Color.fromARGB(255, 85, 84, 84),
               ),
               child: Column(
                 children: [
-                  const Text(
-                    'Menú',
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                  ),
+                  const Text('Menú', style: TextStyle(color: Colors.white, fontSize: 16)),
                   const SizedBox(height: 8),
                   CircleAvatar(
                     radius: 30,
@@ -39,10 +94,7 @@ class NewHomeScreen extends StatelessWidget {
                     child: const Icon(Icons.person, color: Colors.white, size: 30),
                   ),
                   const SizedBox(height: 5),
-                  const Text(
-                    'Invitado',
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                  ),
+                  const Text('Invitado', style: TextStyle(color: Colors.white, fontSize: 16)),
                 ],
               ),
             ),
@@ -83,7 +135,7 @@ class NewHomeScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: InkWell(
-              onTap: () => debugPrint("Barra de búsqueda presionada"),
+              onTap: _mostrarCampoBusqueda,
               borderRadius: BorderRadius.circular(8),
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -119,12 +171,11 @@ class NewHomeScreen extends StatelessWidget {
               style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            // Usamos Expanded para que ListView.builder no genere error
             Expanded(
               child: ListView.builder(
-                itemCount: conjuntos.length,
+                itemCount: _conjuntosFiltrados.length,
                 itemBuilder: (context, index) {
-                  final conjunto = conjuntos[index];
+                  final conjunto = _conjuntosFiltrados[index];
                   return Container(
                     margin: const EdgeInsets.only(bottom: 16),
                     padding: const EdgeInsets.all(16),
@@ -132,7 +183,7 @@ class NewHomeScreen extends StatelessWidget {
                       color: Colors.grey[900],
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
-                        BoxShadow(color: Colors.black54, blurRadius: 4, offset: Offset(0, 2)),
+                        const BoxShadow(color: Colors.black54, blurRadius: 4, offset: Offset(0, 2)),
                       ],
                     ),
                     child: Stack(
@@ -174,7 +225,7 @@ class NewHomeScreen extends StatelessWidget {
                               backgroundColor: Colors.deepPurple,
                             ),
                             onPressed: () {
-                              // Acción de repasar
+                              // Acción de repasar (dejar como estaba)
                             },
                             child: const Text('Repasar'),
                           ),
@@ -201,4 +252,3 @@ class NewHomeScreen extends StatelessWidget {
     );
   }
 }
-
