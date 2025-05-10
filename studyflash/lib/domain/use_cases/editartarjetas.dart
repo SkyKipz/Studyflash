@@ -50,10 +50,13 @@ class _EditScreenState extends State<EditScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF2C2C2C),
+        backgroundColor: const Color(0xFF1D1B20),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(28),
+        ),
         title: const Text(
           'Borrar el conjunto',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.white, fontSize: 20),
         ),
         content: const Text(
           '¿Seguro que quieres borrar el conjunto?',
@@ -63,7 +66,7 @@ class _EditScreenState extends State<EditScreen> {
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
             style: TextButton.styleFrom(
-              backgroundColor: Colors.purple,
+              backgroundColor: const Color(0xFF49454F),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
@@ -97,83 +100,194 @@ class _EditScreenState extends State<EditScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: const Color(0xFF131215),
       appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: const Text('Placeholder', style: TextStyle(color: Colors.white)),
-        actions: const [
-          Icon(Icons.search, color: Colors.white),
-          SizedBox(width: 16),
-          Icon(Icons.filter_list, color: Colors.white),
-          SizedBox(width: 16),
-          Icon(Icons.more_vert, color: Colors.white),
-          SizedBox(width: 8),
+        backgroundColor: const Color(0xFF1D1B20),
+        elevation: 4,
+        shadowColor: Colors.black.withOpacity(0.3),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(28),
+          ),
+        ),
+        title: const Text(
+          'Placeholder',
+          style: TextStyle(
+            color: Color(0xFFFEF7FF),
+            fontSize: 24,
+            height: 0.06,
+            letterSpacing: -0.24,
+          ),
+        ),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search, color: Colors.white),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: const Icon(Icons.filter_list, color: Colors.white),
+            onPressed: () {},
+          ),
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.more_vert, color: Colors.white),
+            itemBuilder: (BuildContext context) => [
+              const PopupMenuItem<String>(
+                value: 'export',
+                child: Text('Exportar conjunto'),
+              ),
+              const PopupMenuItem<String>(
+                value: 'settings',
+                child: Text('Configuración'),
+              ),
+            ],
+          ),
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Lorem Ipsum', style: TextStyle(color: Colors.white70)),
+            const Text(
+              'Lorem Ipsum',
+              style: TextStyle(
+                color: Colors.white70,
+                fontSize: 14,
+                letterSpacing: -0.14,
+              ),
+            ),
+            const SizedBox(height: 24),
             if (showInputFields) ...[
               TextField(
                 controller: _questionController,
-                decoration: const InputDecoration(
-                  labelText: 'Question',
-                  labelStyle: TextStyle(color: Colors.white70),
-                ),
                 style: const TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                  labelText: 'Pregunta',
+                  labelStyle: const TextStyle(color: Colors.white70),
+                  filled: true,
+                  fillColor: const Color(0xFF1D1B20),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
               ),
+              const SizedBox(height: 16),
               TextField(
                 controller: _answerController,
-                decoration: const InputDecoration(
-                  labelText: 'Answer',
-                  labelStyle: TextStyle(color: Colors.white70),
-                ),
                 style: const TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                  labelText: 'Respuesta',
+                  labelStyle: const TextStyle(color: Colors.white70),
+                  filled: true,
+                  fillColor: const Color(0xFF1D1B20),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: _addFlashcard,
-                child: const Text('Add Flashcard'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF49454F),
+                  minimumSize: const Size(double.infinity, 50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: const Text(
+                  'Añadir Flashcard',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 24),
             ],
             Expanded(
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   childAspectRatio: 3 / 2,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
                 ),
                 itemCount: flashcards.length,
                 itemBuilder: (_, i) {
                   final card = flashcards[i];
                   return Container(
-                    padding: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF3A3A3A),
+                      color: const Color(0xFF49454F),
                       borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.3),
+                          blurRadius: 4,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Anverso', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                        Text(card.question, style: TextStyle(color: Colors.white)),
+                        Text(
+                          'Anverso',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            height: 0.08,
+                            letterSpacing: -0.14,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          card.question,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                         const Spacer(),
-                        Text('Reverso', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                        Text(card.answer, style: TextStyle(color: Colors.white)),
+                        Text(
+                          'Reverso',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            height: 0.08,
+                            letterSpacing: -0.14,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          card.answer,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                         const Spacer(),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Icon(Icons.edit, color: Colors.white70, size: 20),
-                            const SizedBox(width: 8),
-                            GestureDetector(
-                              onTap: _showDeleteDialog,
-                              child: Icon(Icons.delete, color: Colors.redAccent, size: 20),
+                            IconButton(
+                              icon: const Icon(Icons.edit, 
+                                color: Colors.white70, 
+                                size: 20),
+                              onPressed: () {},
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.delete, 
+                                color: Colors.redAccent, 
+                                size: 20),
+                              onPressed: _showDeleteDialog,
                             ),
                           ],
                         ),
@@ -188,7 +302,7 @@ class _EditScreenState extends State<EditScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => setState(() => showInputFields = !showInputFields),
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFFFEF7FF),
         child: const Icon(Icons.add, color: Colors.black),
       ),
     );
