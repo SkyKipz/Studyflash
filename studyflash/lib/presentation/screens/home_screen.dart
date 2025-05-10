@@ -97,7 +97,7 @@ class NewHomeScreen extends StatelessWidget {
                   children: const [
                     Icon(Icons.search, color: Colors.white70),
                     SizedBox(width: 8),
-                    Text('Buscar...', style: TextStyle(color: Colors.white54)),
+                    Text('Buscar', style: TextStyle(color: Colors.white54)),
                   ],
                 ),
               ),
