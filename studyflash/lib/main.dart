@@ -29,6 +29,7 @@ class StudyFlash extends StatelessWidget {
     return MaterialApp(
       title: 'StudyFlash',
       theme: ThemeData.dark(),
+      debugShowCheckedModeBanner: false,
       home: showIntro ? const IntroScreen() : const NewHomeScreen(),
     );
   }

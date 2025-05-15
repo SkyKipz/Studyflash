@@ -21,6 +21,22 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^5.0.0
   change_app_package_name: ^1.5.0
+  flutter_launcher_icons: ^0.14.3
+  flutter_native_splash: ^2.4.0
+
+flutter_icons:
+  android: true
+  ios: true 
+  web: 
+  generate: true 
+  image_path: "assets/images/logf.png"
+
+flutter_native_splash:
+  color: "#0B5DAE" # Color de fondo
+  image: assets/images/logf.png # Ruta del logo de carga
+  android: true
+  ios: true
+  web: true
 
 flutter:
   uses-material-design: true
