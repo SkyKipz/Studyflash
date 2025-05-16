@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:studyflash/domain/use_cases/editartarjetas.dart';
 import 'confi.dart';
 import 'opciones.dart'; 
+import 'practica.dart';
+import 'repasar.dart';
 
 class NewHomeScreen extends StatefulWidget {
   const NewHomeScreen({super.key});
@@ -220,17 +222,39 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
                         Positioned(
                           bottom: 0,
                           right: 0,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.deepPurple,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.deepPurple,
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => const RepasarScreen()),
+                                  );
+                                  // Acción de repasar
+                                },
+                                child: const Text('Repasar'),
+                              ),
+                              const SizedBox(width: 8),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.blue,
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => const FlashcardScreen()),
+                                  );
+                                },
+                                child: const Text('Practicar'),
+                              ),
+                            ],
                             ),
-                            onPressed: () {
-                              // Acción de repasar (dejar como estaba)
-                            },
-                            child: const Text('Repasar'),
-                          ),
                         ),
-                      ],
+                        ],
                     ),
                   );
                 },
