@@ -102,61 +102,82 @@ class _EditScreenState extends State<EditScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFF131215),
       appBar: AppBar(
+        toolbarHeight: 120,
         backgroundColor: const Color(0xFF1D1B20),
         elevation: 4,
-        shadowColor: Colors.black.withOpacity(0.3),
+        shadowColor: Colors.black.withValues(alpha: 0.3),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             bottom: Radius.circular(28),
           ),
         ),
-        title: const Text(
-          'Placeholder',
-          style: TextStyle(
-            color: Color(0xFFFEF7FF),
-            fontSize: 24,
-            height: 0.06,
-            letterSpacing: -0.24,
-          ),
-        ),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search, color: Colors.white),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: const Icon(Icons.filter_list, color: Colors.white),
-            onPressed: () {},
-          ),
-          PopupMenuButton<String>(
-            icon: const Icon(Icons.more_vert, color: Colors.white),
-            itemBuilder: (BuildContext context) => [
-              const PopupMenuItem<String>(
-                value: 'export',
-                child: Text('Exportar conjunto'),
+        automaticallyImplyLeading: false,
+        flexibleSpace: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back, color: Colors.white),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  const Spacer(),
+                  IconButton(
+                    icon: const Icon(Icons.search, color: Colors.white),
+                    onPressed: () {},
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.filter_list, color: Colors.white),
+                    onPressed: () {},
+                  ),
+                  PopupMenuButton<String>(
+                    icon: const Icon(Icons.more_vert, color: Colors.white),
+                    itemBuilder: (BuildContext context) => [
+                      const PopupMenuItem<String>(
+                        value: 'export',
+                        child: Text('Exportar conjunto'),
+                      ),
+                      const PopupMenuItem<String>(
+                        value: 'settings',
+                        child: Text('Configuración'),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              const PopupMenuItem<String>(
-                value: 'settings',
-                child: Text('Configuración'),
+              const Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Placeholder',
+                    style: TextStyle(
+                      color: Color(0xFFFEF7FF),
+                      fontSize: 24,
+                      height: 1.2,
+                      letterSpacing: -0.24,
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    'Subtítulo placeholder',
+                    style: TextStyle(
+                      color: Colors.white70,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Lorem Ipsum',
-              style: TextStyle(
-                color: Colors.white70,
-                fontSize: 14,
-                letterSpacing: -0.14,
-              ),
-            ),
             const SizedBox(height: 24),
             if (showInputFields) ...[
               TextField(
@@ -217,13 +238,13 @@ class _EditScreenState extends State<EditScreen> {
                 itemBuilder: (_, i) {
                   final card = flashcards[i];
                   return Container(
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: const Color(0xFF49454F),
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.3),
+                          color: Colors.black.withValues(alpha: 0.3),
                           blurRadius: 4,
                           offset: const Offset(0, 4),
                         ),
@@ -233,33 +254,12 @@ class _EditScreenState extends State<EditScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Anverso',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            height: 0.08,
-                            letterSpacing: -0.14,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
                           card.question,
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 12,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const Spacer(),
-                        Text(
-                          'Reverso',
-                          style: TextStyle(
-                            color: Colors.white,
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
-                            height: 0.08,
+                            height: 1.8,
                             letterSpacing: -0.14,
                           ),
                         ),
@@ -268,12 +268,13 @@ class _EditScreenState extends State<EditScreen> {
                           card.answer,
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 12,
+                            fontSize: 14,
+                            fontWeight: FontWeight.normal,
+                            height: 0.08,
+                            letterSpacing: -0.14,
                           ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
                         ),
-                        const Spacer(),
+                        const SizedBox(height: 8),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
