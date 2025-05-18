@@ -15,7 +15,7 @@ class ConfiScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            Navigator.pop(context); // Volver a home_screen.dart
+            Navigator.pop(context);
           },
         ),
         title: const Text('Configuración', style: TextStyle(color: Colors.white)),

@@ -6,7 +6,11 @@ class CreateFlashcard {
 
   CreateFlashcard(this.repository);
 
-  Future<void> call(Flashcard card) {
-    return repository.createFlashcard(card);
+  Future<void> call({
+    required String uid,
+    required String conjuntoId,
+    required Flashcard card,
+  }) {
+    return repository.createFlashcard(uid, conjuntoId, card);
   }
 }

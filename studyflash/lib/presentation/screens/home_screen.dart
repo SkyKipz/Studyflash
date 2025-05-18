@@ -2,30 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:studyflash/domain/use_cases/editartarjetas.dart';
 import 'confi.dart';
 import 'opciones.dart'; 
+import 'package:studyflash/data/datasources/firebase_database_service.dart';
 
-class NewHomeScreen extends StatefulWidget {
-  const NewHomeScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
-  _NewHomeScreenState createState() => _NewHomeScreenState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _NewHomeScreenState extends State<NewHomeScreen> {
+class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _busquedaController = TextEditingController();
 
-  final List<Map<String, String>> conjuntos = [
-    {'titulo': 'Biología Básica', 'subtitulo': 'Células, ADN y más'},
-    {'titulo': 'Historia Mundial', 'subtitulo': 'Primera y Segunda Guerra'},
-    {'titulo': 'Inglés Intermedio', 'subtitulo': 'Vocabulario y gramática'},
-  ];
+  List<Map<String, String>> conjuntos = [];
 
   List<Map<String, String>> _conjuntosFiltrados = [];
 
   @override
   void initState() {
     super.initState();
-    _conjuntosFiltrados = List.from(conjuntos);
+    _loadConjuntos();
   }
 
   void _filtrarConjuntos(String query) {
@@ -71,6 +68,16 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
         );
       },
     );
+  }
+
+  void _loadConjuntos() async {
+    final uid = 'temp_uid'; 
+    final data = await FirebaseDatabaseService().getAllConjuntos(uid);
+
+    setState(() {
+      conjuntos = data;
+      _conjuntosFiltrados = data;
+    });
   }
 
   @override
@@ -202,7 +209,7 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              conjunto['subtitulo']!,
+                              conjunto['descripcion']!,
                               style: const TextStyle(color: Colors.white70),
                             ),
                             const SizedBox(height: 40),

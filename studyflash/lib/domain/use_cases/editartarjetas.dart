@@ -15,15 +15,20 @@ class _EditScreenState extends State<EditScreen> {
   final _repo = FlashcardRepositoryImpl(FirebaseDatabaseService());
   final _questionController = TextEditingController();
   final _answerController = TextEditingController();
+  
   List<Flashcard> flashcards = [];
   bool showInputFields = false;
 
+  String conjuntoNombre = 'Placeholder';
+  String conjuntoDescripcion = 'Subtítulo placeholder';
+
   void _loadFlashcards() async {
-    final cards = await _repo.getAllFlashcards();
+    final cards = await _repo.getAllFlashcards('temp_uid', 'default_conjunto');
     setState(() {
       flashcards = cards;
     });
   }
+
 
   void _addFlashcard() async {
     final question = _questionController.text;
@@ -37,7 +42,11 @@ class _EditScreenState extends State<EditScreen> {
       answer: answer,
     );
 
-    await CreateFlashcard(_repo).call(card);
+    await CreateFlashcard(_repo).call(
+      uid: 'temp_uid', // TODO: autenticar al usuario
+      conjuntoId: 'default_conjunto',
+      card: card,
+    );
     _questionController.clear();
     _answerController.clear();
     setState(() {
@@ -91,10 +100,88 @@ class _EditScreenState extends State<EditScreen> {
     );
   }
 
+  void _editConjuntoNombre() {
+    // ignore: no_leading_underscores_for_local_identifiers
+    final _nameController = TextEditingController(text: conjuntoNombre);
+    // ignore: no_leading_underscores_for_local_identifiers
+    final _descController = TextEditingController(text: conjuntoDescripcion);
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFF1D1B20),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Text('Editar nombre y descripción', style: TextStyle(color: Colors.white)),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: _nameController,
+              style: const TextStyle(color: Colors.white),
+              decoration: const InputDecoration(
+                labelText: 'Nombre',
+                labelStyle: TextStyle(color: Colors.white70),
+              ),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _descController,
+              style: const TextStyle(color: Colors.white),
+              decoration: const InputDecoration(
+                labelText: 'Descripción',
+                labelStyle: TextStyle(color: Colors.white70),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            child: const Text('Cancelar', style: TextStyle(color: Colors.white70)),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          TextButton(
+            child: const Text('Guardar', style: TextStyle(color: Colors.white)),
+            onPressed: () async {
+              final newName = _nameController.text.trim();
+              final newDesc = _descController.text.trim();
+              final navigator = Navigator.of(context);
+
+              if (newName.isNotEmpty) {
+                await FirebaseDatabaseService().updateConjuntoInfo(
+                  'temp_uid',          // TODO: autenticar al usuario
+                  'default_conjunto',  // TODO: obtener el id del conjunto
+                  newName,
+                  newDesc,
+                );
+
+                setState(() {
+                  conjuntoNombre = newName;
+                  conjuntoDescripcion = newDesc;
+                });
+              }
+
+              navigator.pop();
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _loadMetadata() async {
+    final meta = await FirebaseDatabaseService()
+        .getConjuntoMetadata('temp_uid', 'default_conjunto');
+    setState(() {
+      conjuntoNombre = meta['name'] ?? '';
+      conjuntoDescripcion = meta['description'] ?? '';
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     _loadFlashcards();
+    _loadMetadata();
   }
 
   @override
@@ -134,10 +221,15 @@ class _EditScreenState extends State<EditScreen> {
                   ),
                   PopupMenuButton<String>(
                     icon: const Icon(Icons.more_vert, color: Colors.white),
+                    onSelected: (value) {
+                      if (value == 'editname') {
+                        _editConjuntoNombre();
+                      }
+                    },
                     itemBuilder: (BuildContext context) => [
                       const PopupMenuItem<String>(
-                        value: 'export',
-                        child: Text('Exportar conjunto'),
+                        value: 'editname',
+                        child: Text('Editar nombre'),
                       ),
                       const PopupMenuItem<String>(
                         value: 'settings',
@@ -147,11 +239,11 @@ class _EditScreenState extends State<EditScreen> {
                   ),
                 ],
               ),
-              const Column(
+              Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'Placeholder',
+                    conjuntoNombre,
                     style: TextStyle(
                       color: Color(0xFFFEF7FF),
                       fontSize: 24,
@@ -161,7 +253,7 @@ class _EditScreenState extends State<EditScreen> {
                   ),
                   SizedBox(height: 4),
                   Text(
-                    'Subtítulo placeholder',
+                    conjuntoDescripcion,
                     style: TextStyle(
                       color: Colors.white70,
                       fontSize: 14,

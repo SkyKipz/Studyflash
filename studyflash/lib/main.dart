@@ -30,7 +30,7 @@ class StudyFlash extends StatelessWidget {
       title: 'StudyFlash',
       theme: ThemeData.dark(),
       debugShowCheckedModeBanner: false,
-      home: showIntro ? const IntroScreen() : const NewHomeScreen(),
+      home: showIntro ? const IntroScreen() : const HomeScreen(),
     );
   }
 }

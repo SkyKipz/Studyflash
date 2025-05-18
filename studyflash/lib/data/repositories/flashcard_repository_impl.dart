@@ -8,8 +8,12 @@ class FlashcardRepositoryImpl implements FlashcardRepository {
   FlashcardRepositoryImpl(this.db);
 
   @override
-  Future<void> createFlashcard(Flashcard card) => db.insertCard(card);
+  Future<void> createFlashcard(String uid, String conjuntoId, Flashcard card) {
+    return db.insertCard(uid, conjuntoId, card);
+  }
 
   @override
-  Future<List<Flashcard>> getAllFlashcards() => db.getAllCards();
+  Future<List<Flashcard>> getAllFlashcards(String uid, String conjuntoId) {
+    return db.getAllCards(uid, conjuntoId);
+  }
 }
