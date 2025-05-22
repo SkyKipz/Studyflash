@@ -78,4 +78,27 @@ class FirebaseDatabaseService {
       return [];
     }
   }
+
+  Future<String> createConjunto(
+    String uid,
+    String nombre,
+    String descripcion,
+    String primeraPregunta,
+    String primeraRespuesta,
+  ) async {
+    try {
+      final conjuntosRef = _db.child('users/$uid/conjuntos');
+      final nuevoConjuntoRef = conjuntosRef.push();
+      
+      await nuevoConjuntoRef.set({
+        'name': nombre,
+        'description': descripcion,
+        'createdAt': ServerValue.timestamp,
+      });
+
+      return nuevoConjuntoRef.key!;
+    } catch (e) {
+      throw Exception('Error al crear el conjunto: $e');
+    }
+  }
 }

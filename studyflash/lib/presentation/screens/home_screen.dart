@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:studyflash/domain/use_cases/editartarjetas.dart';
+import 'package:studyflash/domain/use_cases/add_flashcard.dart';
 import 'confi.dart';
 import 'opciones.dart'; 
 import 'package:studyflash/data/datasources/firebase_database_service.dart';
@@ -72,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _loadConjuntos() async {
+  Future<void> _loadConjuntos() async {
     final uid = 'temp_uid'; 
     final data = await FirebaseDatabaseService().getAllConjuntos(uid);
 
@@ -182,100 +182,111 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 16),
             Expanded(
-              child: ListView.builder(
-                itemCount: _conjuntosFiltrados.length,
-                itemBuilder: (context, index) {
-                  final conjunto = _conjuntosFiltrados[index];
-                  return Container(
-                    margin: const EdgeInsets.only(bottom: 16),
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[900],
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        const BoxShadow(color: Colors.black54, blurRadius: 4, offset: Offset(0, 2)),
-                      ],
-                    ),
-                    child: Stack(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              conjunto['titulo']!,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              conjunto['descripcion']!,
-                              style: const TextStyle(color: Colors.white70),
-                            ),
-                            const SizedBox(height: 40),
-                          ],
-                        ),
-                        Positioned(
-                          top: 0,
-                          right: 0,
-                          child: IconButton(
-                            icon: const Icon(Icons.more_vert, color: Colors.white),
-                            onPressed: () {
-                              showOpcionesDialog(context);
-                            },
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.deepPurple,
-                                ),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => const RepasarScreen()),
-                                  );
-                                  // Acción de repasar
-                                },
-                                child: const Text('Repasar'),
-                              ),
-                              const SizedBox(width: 8),
-                              ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.blue,
-                                ),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => const FlashcardScreen()),
-                                  );
-                                },
-                                child: const Text('Practicar'),
-                              ),
-                            ],
-                            ),
-                        ),
-                        ],
-                    ),
-                  );
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  await _loadConjuntos();
                 },
-              ),
+                color: Colors.deepPurple,
+                backgroundColor: Colors.grey[900],
+                child: ListView.builder(
+                  itemCount: _conjuntosFiltrados.length,
+                  itemBuilder: (context, index) {
+                    final conjunto = _conjuntosFiltrados[index];
+                    final conjuntoId = conjunto['id']!;
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: 16),
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[900],
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          const BoxShadow(color: Colors.black54, blurRadius: 4, offset: Offset(0, 2)),
+                        ],
+                      ),
+                      child: Stack(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                conjunto['titulo']!,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                conjunto['descripcion']!,
+                                style: const TextStyle(color: Colors.white70),
+                              ),
+                              const SizedBox(height: 40),
+                            ],
+                          ),
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: IconButton(
+                              icon: const Icon(Icons.more_vert, color: Colors.white),
+                              onPressed: () {
+                                showOpcionesDialog(context, conjuntoId);
+                              },
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.deepPurple,
+                                  ),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => RepasarScreen(conjuntoId)),
+                                    );
+                                    // Acción de repasar
+                                  },
+                                  child: const Text('Repasar'),
+                                ),
+                                const SizedBox(width: 8),
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.blue,
+                                  ),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => FlashcardScreen(conjuntoId)),
+                                    );
+                                  },
+                                  child: const Text('Practicar'),
+                                ),
+                              ],
+                              ),
+                          ),
+                          ],
+                      ),
+                    );
+                  },
+                ),
+              ),  
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          final uid = 'temp_uid';
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => EditScreen()),
+            MaterialPageRoute(
+              builder: (context) => AgregarConjuntoScreen(uid),
+            ),
           );
         },
         backgroundColor: Colors.deepPurple,

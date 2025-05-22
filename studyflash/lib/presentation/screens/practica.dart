@@ -4,7 +4,9 @@ import 'package:studyflash/data/repositories/flashcard_repository_impl.dart';
 import 'package:studyflash/domain/models/flashcard.dart';
 
 class FlashcardScreen extends StatefulWidget {
-  const FlashcardScreen({super.key});
+  final String conjuntoId;
+
+  const FlashcardScreen(this.conjuntoId, {super.key});
 
   @override
   State<FlashcardScreen> createState() => _FlashcardScreenState();
@@ -23,7 +25,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
   }
 
   Future<void> _loadFlashcards() async {
-    final cards = await _repo.getAllFlashcards('temp_uid', 'default_conjunto');
+    final cards = await _repo.getAllFlashcards('temp_uid', widget.conjuntoId);
     setState(() {
       flashcards = cards;
     });

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-void showDeleteDialog(BuildContext context) {
+void showDeleteDialog(BuildContext context, String conjuntoId) {
   showDialog(
     context: context,
     builder: (context) => AlertDialog(

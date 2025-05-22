@@ -1,8 +1,10 @@
 // opciones.dart
 import 'package:flutter/material.dart';
 import 'opciones/eliminar.dart';
+import 'package:studyflash/domain/use_cases/editartarjetas.dart';
 
-void showOpcionesDialog(BuildContext context) {
+void showOpcionesDialog(BuildContext context, String conjuntoId) {
+  conjuntoId = conjuntoId;
   showDialog(
     context: context,
     builder: (context) => SimpleDialog(
@@ -15,29 +17,29 @@ void showOpcionesDialog(BuildContext context) {
       children: [
         SimpleDialogOption(
           onPressed: () {
-            Navigator.of(context).pop();
-            // Lógica para editar
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => EditScreen(conjuntoId)),
+            );
           },
           child: const Text('Editar', style: TextStyle(color: Colors.white)),
         ),
         SimpleDialogOption(
           onPressed: () {
             Navigator.of(context).pop();
-            // Lógica para marcador
           },
           child: const Text('Marcador', style: TextStyle(color: Colors.white)),
         ),
         SimpleDialogOption(
           onPressed: () {
             Navigator.of(context).pop();
-            // Lógica para compartir
           },
           child: const Text('Compartir', style: TextStyle(color: Colors.white)),
         ),
         SimpleDialogOption(
           onPressed: () {
-            Navigator.of(context).pop(); // Cierra este diálogo
-            showDeleteDialog(context);  // Llama al cuadro de confirmación
+            Navigator.of(context).pop();
+            showDeleteDialog(context, conjuntoId); // Pásalo también aquí si hace falta
           },
           child: const Text(
             'Borrar',

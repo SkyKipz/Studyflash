@@ -5,7 +5,9 @@ import 'package:studyflash/domain/models/flashcard.dart';
 import 'package:studyflash/domain/use_cases/create_flashcard.dart';
 
 class EditScreen extends StatefulWidget {
-  const EditScreen({super.key});
+  final String conjuntoId;
+
+  const EditScreen(this.conjuntoId, {super.key});
 
   @override
   State<EditScreen> createState() => _EditScreenState();
@@ -22,8 +24,8 @@ class _EditScreenState extends State<EditScreen> {
   String conjuntoNombre = 'Placeholder';
   String conjuntoDescripcion = 'Subtítulo placeholder';
 
-  void _loadFlashcards() async {
-    final cards = await _repo.getAllFlashcards('temp_uid', 'default_conjunto');
+  Future<void> _loadFlashcards() async {
+    final cards = await _repo.getAllFlashcards('temp_uid', conjuntoId);
     setState(() {
       flashcards = cards;
     });
@@ -44,7 +46,7 @@ class _EditScreenState extends State<EditScreen> {
 
     await CreateFlashcard(_repo).call(
       uid: 'temp_uid', // TODO: autenticar al usuario
-      conjuntoId: 'default_conjunto',
+      conjuntoId: conjuntoId,
       card: card,
     );
     _questionController.clear();
@@ -149,7 +151,7 @@ class _EditScreenState extends State<EditScreen> {
               if (newName.isNotEmpty) {
                 await FirebaseDatabaseService().updateConjuntoInfo(
                   'temp_uid',          // TODO: autenticar al usuario
-                  'default_conjunto',  // TODO: obtener el id del conjunto
+                  conjuntoId,
                   newName,
                   newDesc,
                 );
@@ -170,16 +172,19 @@ class _EditScreenState extends State<EditScreen> {
 
   void _loadMetadata() async {
     final meta = await FirebaseDatabaseService()
-        .getConjuntoMetadata('temp_uid', 'default_conjunto');
+        .getConjuntoMetadata('temp_uid', conjuntoId);
     setState(() {
       conjuntoNombre = meta['name'] ?? '';
       conjuntoDescripcion = meta['description'] ?? '';
     });
   }
 
+  late String conjuntoId;
+
   @override
   void initState() {
     super.initState();
+    conjuntoId = widget.conjuntoId;
     _loadFlashcards();
     _loadMetadata();
   }
