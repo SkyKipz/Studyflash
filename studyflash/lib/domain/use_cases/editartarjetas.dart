@@ -57,7 +57,10 @@ class _EditScreenState extends State<EditScreen> {
     _loadFlashcards();
   }
 
-  void _showDeleteDialog() {
+  void _showDeleteDialog({
+    required String conjuntoId,
+    required String flashcardId,
+  }) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -66,11 +69,11 @@ class _EditScreenState extends State<EditScreen> {
           borderRadius: BorderRadius.circular(28),
         ),
         title: const Text(
-          'Borrar el conjunto',
+          'Borrar flashcard',
           style: TextStyle(color: Colors.white, fontSize: 20),
         ),
         content: const Text(
-          '¿Seguro que quieres borrar el conjunto?',
+          '¿Seguro que quieres borrar esta flashcard?',
           style: TextStyle(color: Colors.white70),
         ),
         actions: [
@@ -85,9 +88,21 @@ class _EditScreenState extends State<EditScreen> {
             child: const Text('Cancelar', style: TextStyle(color: Colors.white)),
           ),
           TextButton(
-            onPressed: () {
-              // Aquí puedes agregar la lógica para eliminar
-              Navigator.of(context).pop();
+            onPressed: () async {
+              await FirebaseDatabaseService().deleteFlashcard(
+                'temp_uid',
+                conjuntoId,
+                flashcardId,
+              );
+              if (mounted) {
+                // ignore: use_build_context_synchronously
+                Navigator.of(context).pop();
+                // ignore: use_build_context_synchronously
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Flashcard eliminada')),
+                );
+                await _loadFlashcards();
+              }
             },
             style: TextButton.styleFrom(
               backgroundColor: Colors.red,
@@ -101,6 +116,7 @@ class _EditScreenState extends State<EditScreen> {
       ),
     );
   }
+
 
   void _editConjuntoNombre() {
     // ignore: no_leading_underscores_for_local_identifiers
@@ -385,7 +401,10 @@ class _EditScreenState extends State<EditScreen> {
                               icon: const Icon(Icons.delete, 
                                 color: Colors.redAccent, 
                                 size: 20),
-                              onPressed: _showDeleteDialog,
+                                onPressed: () => _showDeleteDialog(
+                                  conjuntoId: conjuntoId,
+                                  flashcardId: card.id,
+                                ),
                             ),
                           ],
                         ),

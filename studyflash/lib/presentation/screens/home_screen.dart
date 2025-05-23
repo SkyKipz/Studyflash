@@ -85,37 +85,52 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: const Color(0xFF131215),
       drawer: Drawer(
+        backgroundColor: const Color(0xFF1D1B20),
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
               decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 85, 84, 84),
+                color: Color(0xFF1D1B20),
               ),
               child: Column(
                 children: [
-                  const Text('Menú', style: TextStyle(color: Colors.white, fontSize: 16)),
+                  const Text('Menú', 
+                    style: TextStyle(
+                      color: Color(0xFFFEF7FF), 
+                      fontSize: 16,
+                      letterSpacing: -0.16,
+                    )),
                   const SizedBox(height: 8),
                   CircleAvatar(
                     radius: 30,
-                    backgroundColor: Colors.grey[800],
-                    child: const Icon(Icons.person, color: Colors.white, size: 30),
+                    backgroundColor: const Color(0xFF49454F),
+                    child: const Icon(Icons.person, 
+                      color: Color(0xFFFEF7FF), 
+                      size: 30),
                   ),
                   const SizedBox(height: 5),
-                  const Text('Invitado', style: TextStyle(color: Colors.white, fontSize: 16)),
+                  const Text('Invitado', 
+                    style: TextStyle(
+                      color: Color(0xFFFEF7FF), 
+                      fontSize: 16,
+                      letterSpacing: -0.16,
+                    )),
                 ],
               ),
             ),
             ListTile(
-              leading: const Icon(Icons.bookmark),
-              title: const Text('Marcadores'),
+              leading: const Icon(Icons.bookmark, color: Color(0xFFFEF7FF)),
+              title: const Text('Marcadores', 
+                style: TextStyle(color: Color(0xFFFEF7FF))),
               onTap: () {},
             ),
             ListTile(
-              leading: const Icon(Icons.settings),
-              title: const Text('Configuración'),
+              leading: const Icon(Icons.settings, color: Color(0xFFFEF7FF)),
+              title: const Text('Configuración', 
+                style: TextStyle(color: Color(0xFFFEF7FF))),
               onTap: () {
                 Navigator.push(
                   context,
@@ -124,61 +139,82 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.help),
-              title: const Text('Ayuda'),
+              leading: const Icon(Icons.help, color: Color(0xFFFEF7FF)),
+              title: const Text('Ayuda', 
+                style: TextStyle(color: Color(0xFFFEF7FF))),
               onTap: () {},
             ),
           ],
         ),
       ),
       appBar: AppBar(
-        backgroundColor: Colors.black,
-        elevation: 0,
+        toolbarHeight: 80,
+        backgroundColor: const Color(0xFF1D1B20),
+        elevation: 4,
+        shadowColor: Colors.black.withValues(alpha: 0.3),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(28),
+          ),
+        ),
         leading: Builder(
           builder: (context) => IconButton(
-            icon: const Icon(Icons.menu, color: Colors.white),
+            icon: const Icon(Icons.menu, color: Color(0xFFFEF7FF)),
             onPressed: () => Scaffold.of(context).openDrawer(),
           ),
         ),
-        title: const Text('StudyFlash', style: TextStyle(color: Colors.white)),
+        title: const Text('StudyFlash', 
+          style: TextStyle(
+            color: Color(0xFFFEF7FF),
+            letterSpacing: -0.24,
+          )),
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: InkWell(
               onTap: _mostrarCampoBusqueda,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(12),
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 decoration: BoxDecoration(
-                  color: Colors.white10,
-                  borderRadius: BorderRadius.circular(8),
+                  color: const Color(0xFF49454F),
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 width: 180,
                 height: 40,
                 child: Row(
                   children: const [
-                    Icon(Icons.search, color: Colors.white70),
+                    Icon(Icons.search, color: Color(0xFFFEF7FF)),
                     SizedBox(width: 8),
-                    Text('Buscar', style: TextStyle(color: Colors.white54)),
+                    Text('Buscar', 
+                      style: TextStyle(
+                        color: Color(0xFFFEF7FF),
+                        letterSpacing: -0.14,
+                      )),
                   ],
                 ),
               ),
             ),
           ),
           IconButton(
-            icon: const Icon(Icons.more_vert),
+            icon: const Icon(Icons.more_vert, color: Color(0xFFFEF7FF)),
             onPressed: () {},
           ),
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
               'Conjuntos de flashcards',
-              style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                color: Color(0xFFFEF7FF),
+                fontSize: 20, 
+                fontWeight: FontWeight.bold,
+                letterSpacing: -0.2,
+              ),
             ),
             const SizedBox(height: 16),
             Expanded(
@@ -186,21 +222,25 @@ class _HomeScreenState extends State<HomeScreen> {
                 onRefresh: () async {
                   await _loadConjuntos();
                 },
-                color: Colors.deepPurple,
-                backgroundColor: Colors.grey[900],
+                color: const Color(0xFFFEF7FF),
+                backgroundColor: const Color(0xFF1D1B20),
                 child: ListView.builder(
                   itemCount: _conjuntosFiltrados.length,
                   itemBuilder: (context, index) {
                     final conjunto = _conjuntosFiltrados[index];
                     final conjuntoId = conjunto['id']!;
                     return Container(
+                      height: 140,
                       margin: const EdgeInsets.only(bottom: 16),
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.grey[900],
+                        color: const Color(0xFF1D1B20),
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
-                          const BoxShadow(color: Colors.black54, blurRadius: 4, offset: Offset(0, 2)),
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.3),
+                            blurRadius: 4, 
+                            offset: const Offset(0, 2)),
                         ],
                       ),
                       child: Stack(
@@ -211,15 +251,19 @@ class _HomeScreenState extends State<HomeScreen> {
                               Text(
                                 conjunto['titulo']!,
                                 style: const TextStyle(
-                                  color: Colors.white,
+                                  color: Color(0xFFFEF7FF),
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
+                                  letterSpacing: -0.18,
                                 ),
                               ),
                               const SizedBox(height: 4),
                               Text(
                                 conjunto['descripcion']!,
-                                style: const TextStyle(color: Colors.white70),
+                                style: const TextStyle(
+                                  color: Color(0xFFFEF7FF),
+                                  letterSpacing: -0.14,
+                                ),
                               ),
                               const SizedBox(height: 40),
                             ],
@@ -228,7 +272,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             top: 0,
                             right: 0,
                             child: IconButton(
-                              icon: const Icon(Icons.more_vert, color: Colors.white),
+                              icon: const Icon(Icons.more_vert, color: Color(0xFFFEF7FF)),
                               onPressed: () {
                                 showOpcionesDialog(context, conjuntoId);
                               },
@@ -242,21 +286,29 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: [
                                 ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.deepPurple,
+                                    backgroundColor: const Color(0xFF49454F),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
                                   ),
                                   onPressed: () {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(builder: (context) => RepasarScreen(conjuntoId)),
                                     );
-                                    // Acción de repasar
                                   },
-                                  child: const Text('Repasar'),
+                                  child: const Text(
+                                    'Repasar',
+                                    style: TextStyle(color: Color(0xFFFEF7FF)),
+                                  ),
                                 ),
                                 const SizedBox(width: 8),
                                 ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.blue,
+                                    backgroundColor: const Color(0xFF49454F),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
                                   ),
                                   onPressed: () {
                                     Navigator.push(
@@ -264,12 +316,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                       MaterialPageRoute(builder: (context) => FlashcardScreen(conjuntoId)),
                                     );
                                   },
-                                  child: const Text('Practicar'),
+                                  child: const Text(
+                                    'Practicar',
+                                    style: TextStyle(color: Color(0xFFFEF7FF)),
+                                  ),
                                 ),
                               ],
-                              ),
+                            ),
                           ),
-                          ],
+                        ],
                       ),
                     );
                   },
@@ -289,8 +344,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           );
         },
-        backgroundColor: Colors.deepPurple,
-        child: const Icon(Icons.add),
+        backgroundColor: const Color(0xFFFEF7FF),
+        child: const Icon(Icons.add, color: Colors.black),
       ),
     );
   }

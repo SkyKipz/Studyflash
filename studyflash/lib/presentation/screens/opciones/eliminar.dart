@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:studyflash/data/datasources/firebase_database_service.dart';
+import 'package:studyflash/presentation/screens/home_screen.dart'; // ajusta si tienes otro path
 
 void showDeleteDialog(BuildContext context, String conjuntoId) {
   showDialog(
@@ -25,9 +27,24 @@ void showDeleteDialog(BuildContext context, String conjuntoId) {
           child: const Text('Cancelar', style: TextStyle(color: Colors.white)),
         ),
         TextButton(
-          onPressed: () {
-            // Aquí puedes agregar la lógica para eliminar
-            Navigator.of(context).pop();
+          onPressed: () async {
+            await FirebaseDatabaseService().deleteConjunto(
+              'temp_uid', // TODO: usar uid real si hay login
+              conjuntoId,
+            );
+
+            if (context.mounted) {
+              Navigator.of(context).pop();
+              
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (_) => const HomeScreen()),
+                (route) => false,
+              );
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Conjunto eliminado')),
+              );
+            }
           },
           style: TextButton.styleFrom(
             backgroundColor: Colors.red,

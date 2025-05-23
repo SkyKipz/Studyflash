@@ -101,4 +101,14 @@ class FirebaseDatabaseService {
       throw Exception('Error al crear el conjunto: $e');
     }
   }
+
+  Future<void> deleteFlashcard(String uid, String conjuntoId, String cardId) async {
+    final path = 'users/$uid/conjuntos/$conjuntoId/flashcards/$cardId';
+    await _db.child(path).remove();
+  }
+
+  Future<void> deleteConjunto(String uid, String conjuntoId) async {
+    final path = 'users/$uid/conjuntos/$conjuntoId';
+    await _db.child(path).remove();
+  }
 }

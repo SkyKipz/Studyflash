@@ -25,7 +25,6 @@ class _AgregarConjuntoScreenState extends State<AgregarConjuntoScreen> {
     final reverso = _reversoController.text.trim();
     final navigator = Navigator.of(context);
 
-    // Validaciones
     if (nombre.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('El nombre del conjunto es requerido')),
@@ -33,7 +32,7 @@ class _AgregarConjuntoScreenState extends State<AgregarConjuntoScreen> {
       return;
     }
 
-    if (anverso.isEmpty || reverso.isEmpty) {
+    if (_conjuntoId == null && (anverso.isEmpty || reverso.isEmpty)) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Debes agregar al menos una flashcard')),
       );
@@ -44,59 +43,113 @@ class _AgregarConjuntoScreenState extends State<AgregarConjuntoScreen> {
       final repo = FlashcardRepositoryImpl(FirebaseDatabaseService());
       final createFlashcard = CreateFlashcard(repo);
 
-      // Mostrar diálogo de carga
       showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (context) => const Center(
-          child: CircularProgressIndicator(),
-        ),
+        builder: (context) => const Center(child: CircularProgressIndicator()),
       );
 
-      final conjuntoId = await FirebaseDatabaseService().createConjunto(
-        uid,
-        nombre,
-        descripcion,
-        anverso,
-        reverso,
-      );
+      if (_conjuntoId == null) {
+        _conjuntoId = await FirebaseDatabaseService().createConjunto(
+          uid,
+          nombre,
+          descripcion,
+          anverso,
+          reverso,
+        );
 
-      final primeraFlashcard = Flashcard(
-        id: DateTime.now().toIso8601String().replaceAll(RegExp(r'[.#$[\]]'), '-'),
-        question: anverso,
-        answer: reverso,
-      );
-      
-      await createFlashcard.call(
-        uid: uid,
-        conjuntoId: conjuntoId,
-        card: primeraFlashcard,
-      );
+        final primeraFlashcard = Flashcard(
+          id: DateTime.now().toIso8601String().replaceAll(RegExp(r'[.#$[\]]'), '-'),
+          question: anverso,
+          answer: reverso,
+        );
 
-      navigator.pop();
-
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Conjunto creado exitosamente')),
+        await createFlashcard.call(
+          uid: uid,
+          conjuntoId: _conjuntoId!,
+          card: primeraFlashcard,
+        );
+      } else {
+        await FirebaseDatabaseService().updateConjuntoInfo(
+          uid,
+          _conjuntoId!,
+          nombre,
+          descripcion,
         );
       }
-      if (mounted){
-        Navigator.pop(context, conjuntoId);
-      }
 
-    } catch (e) {
       navigator.pop();
-      
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error al crear el conjunto: ${e.toString()}')),
+          const SnackBar(content: Text('Conjunto guardado')),
+        );
+        Navigator.pop(context, _conjuntoId); // salir y pasar el ID
+      }
+    } catch (e) {
+      navigator.pop();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${e.toString()}')),
         );
       }
     }
   }
 
-  void _agregarFlashcard() {
-    // TODO: Agrega aquí la lógica para añadir una nueva flashcard
+  String? _conjuntoId; 
+
+  void _agregarFlashcard() async {
+    final anverso = _anversoController.text.trim();
+    final reverso = _reversoController.text.trim();
+
+    if (anverso.isEmpty || reverso.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Completa ambos lados de la flashcard')),
+      );
+      return;
+    }
+
+    try {
+      final repo = FlashcardRepositoryImpl(FirebaseDatabaseService());
+      final createFlashcard = CreateFlashcard(repo);
+
+      if (_conjuntoId == null) {
+        final nuevoId = await FirebaseDatabaseService().createConjunto(
+          uid,
+          _nombreController.text.trim(),
+          _descripcionController.text.trim(),
+          anverso,
+          reverso,
+        );
+        _conjuntoId = nuevoId;
+      }
+
+      final flashcard = Flashcard(
+        id: DateTime.now().toIso8601String().replaceAll(RegExp(r'[.#$[\]]'), '-'),
+        question: anverso,
+        answer: reverso,
+      );
+
+      await createFlashcard.call(
+        uid: uid,
+        conjuntoId: _conjuntoId!,
+        card: flashcard,
+      );
+
+      _anversoController.clear();
+      _reversoController.clear();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Flashcard agregada')),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${e.toString()}')),
+        );
+      }
+    }
   }
 
   late String uid;
