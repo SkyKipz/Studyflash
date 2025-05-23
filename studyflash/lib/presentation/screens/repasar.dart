@@ -102,7 +102,7 @@ class _RepasarScreenState extends State<RepasarScreen> {
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 300),
                       curve: Curves.easeInOut,
-                      height: 600,
+                      height: 500,
                       width: double.infinity,
                       decoration: BoxDecoration(
                         color: showAnswer 
