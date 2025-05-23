@@ -5,6 +5,7 @@ import 'opciones.dart';
 import 'package:studyflash/data/datasources/firebase_database_service.dart';
 import 'practica.dart';
 import 'repasar.dart';
+import 'help_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -142,7 +143,12 @@ class _HomeScreenState extends State<HomeScreen> {
               leading: const Icon(Icons.help, color: Color(0xFFFEF7FF)),
               title: const Text('Ayuda', 
                 style: TextStyle(color: Color(0xFFFEF7FF))),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HelpScreen()),
+                );
+              },
             ),
           ],
         ),

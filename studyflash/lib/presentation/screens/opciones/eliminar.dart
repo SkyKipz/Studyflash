@@ -29,7 +29,7 @@ void showDeleteDialog(BuildContext context, String conjuntoId) {
         TextButton(
           onPressed: () async {
             await FirebaseDatabaseService().deleteConjunto(
-              'temp_uid', // TODO: usar uid real si hay login
+              'temp_uid',
               conjuntoId,
             );
 

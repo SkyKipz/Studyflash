@@ -45,7 +45,7 @@ class _EditScreenState extends State<EditScreen> {
     );
 
     await CreateFlashcard(_repo).call(
-      uid: 'temp_uid', // TODO: autenticar al usuario
+      uid: 'temp_uid',
       conjuntoId: conjuntoId,
       card: card,
     );
@@ -166,7 +166,7 @@ class _EditScreenState extends State<EditScreen> {
 
               if (newName.isNotEmpty) {
                 await FirebaseDatabaseService().updateConjuntoInfo(
-                  'temp_uid',          // TODO: autenticar al usuario
+                  'temp_uid',
                   conjuntoId,
                   newName,
                   newDesc,
